@@ -35,6 +35,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+//dd('pepoooas');
         //dd ( $request->session()->all() );
         //$request->session()->forget('arreglo.1') ;
         //$request->session()->flush();
@@ -194,6 +195,16 @@ class HomeController extends Controller
                             $query->orwhere('variacions.nombre', 'like',  '%' . $busq[$i] .'%');
                             $query->orwhere('modelos.nombre', 'like',  '%' . $busq[$i] .'%');
                             $query->orwhere('marcas.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)
+
+            ->orWhereHas('descripcion', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('descripcions.nombre', 'like',  '%' . $busq[$i] .'%');
                          }      
                     });
 

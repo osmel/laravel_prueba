@@ -27,7 +27,7 @@
     
 
 <div id="mi_galeria">
-  @include('presentacion.cesta2')
+  @include('presentacion.cesta2') 
     <div class="card-columns" >
         @foreach($producto as $indice =>$prod) 
           <div class="card">
