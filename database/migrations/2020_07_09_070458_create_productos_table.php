@@ -21,6 +21,7 @@ class CreateProductosTable extends Migration
             //$table->integer('codigo_id')->unsigned();
 
             //$table->integer('modelo_id')->unsigned();
+            $table->string('surtido', 15); 
             $table->integer('fabricante_id')->unsigned();
             $table->integer('categoria_id')->unsigned();
 

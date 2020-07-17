@@ -13,6 +13,10 @@ use App\Variacion;
 use App\Modelo; //tabla no relacionada directamente, si indirectamente
 use App\Marca; //tabla no relacionada directamente, si indirectamente
 
+use App\Inventario;
+
+use App\Movimiento;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
@@ -26,8 +30,21 @@ class Producto extends Model
      */
     protected $fillable = [
         //'descripcion_id', 'codigo_id','modelo_id','precio',
-        'precio','fabricante_id','categoria_id',
+        'precio','fabricante_id','categoria_id','surtido',
     ]; 
+
+
+
+
+
+
+///////////////////relacion 1 a 1
+//hasOne
+    
+    public function inventario() {
+      return $this->hasOne(Inventario::class,'producto_id');
+    }
+    
 
 
 
@@ -42,6 +59,9 @@ class Producto extends Model
 */    
 
     ////belongsTo
+
+
+
 
     public function fabricante()   { 
         return $this->belongsTo(Fabricante::class, 'fabricante_id','id');  //
@@ -72,6 +92,11 @@ class Producto extends Model
     	return $this->hasMany(Foto::class, 'producto_id','id'); 
     }
 
+
+    public function movimientos()   { 
+        return $this->hasMany(Movimiento::class);  //'producto_id', , 'id'
+    }   
+
     /////////////// https://desarrolloweb.com/articulos/relaciones-modelos-through.html
     /*esto se aplica por ejemplo para saber el modelo q tiene un producto, q no hay una relacion directa*/
         //return json_encode( Producto::first()->modelo );
@@ -80,8 +105,10 @@ class Producto extends Model
     public function modelo() {
 
         return $this->hasManyThrough(
-                Variacion::class, // Modelo intermedio
+                
                 Modelo::class, // Modelo destino
+                Variacion::class, // Modelo intermedio
+                
                 //Variacion::class, // Modelo intermedio
                 
                 'id', // Clave foránea en la tabla intermedia
@@ -99,8 +126,9 @@ class Producto extends Model
     public function marca() {
 
         return $this->hasManyThrough(
-                Modelo::class, // Modelo intermedio
                 Marca::class, // Modelo destino
+                Modelo::class, // Modelo intermedio
+                
                 
                 'id', // Clave foránea en la tabla intermedia
                 'id' // Clave foránea en la tabla de destino

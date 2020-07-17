@@ -3,7 +3,7 @@
 
 @section('content')
       <div class="card">
-        <h4 class="card-header"> {{ trans('aplicacion.Create categories') }}</h4>
+        <h4 class="card-header"> {{ trans('aplicacion.Create motors') }}</h4>
         <div class="card-body">
 
            {{-- Esto es para mostrar listado de errores al comienzo --}}
@@ -29,8 +29,8 @@
 
                
 
-                <button type="submit" class="btn btn-primary">{{ trans('aplicacion.Create categories') }}</button>
-                <a href="{{ route('motors.index') }}" class="btn btn-danger">{{ trans('aplicacion.Return to categories list') }}</a>
+                <button type="submit" class="btn btn-primary">{{ trans('aplicacion.Create motors') }}</button>
+                <a href="{{ route('motors.index') }}" class="btn btn-danger">{{ trans('aplicacion.Return to motors list') }}</a>
             </form>
         </div>
     </div>

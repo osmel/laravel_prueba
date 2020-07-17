@@ -13,9 +13,13 @@ use App\Categoria;
 
 use App\Fabricante;
 use App\Motor;
+use App\Descripcion;
+
 
 use App\Producto;
-
+use App\Foto;
+use App\Codigo;
+use App\Producto_Variacion;
 
 
 
@@ -500,7 +504,7 @@ class CatalogosController extends Controller
 
     //listado de tabla productos
     public function index_producto() {
-        $productos= producto::all()->take(10); 
+        $productos= Producto::all()->take(10); 
         return view('nomencladores.productos.productos',['title'=>'Listado de productos','productos'=>$productos]); 
     }
  
@@ -512,16 +516,99 @@ class CatalogosController extends Controller
     
     //validacion creacion de nuevo producto
     public function store_producto() { //procesar el formulario
+
+        //$data = request()->all();
+        //return  json_encode($data);
+
+        //creando el producto
         $data = request()->validate([
-            'nombre' => 'required',
+                'surtido' => 'required',
+                'multiselect_fabricante' => 'required',
+                'multiselect_categoria' => 'required',
+                'precio' => 'required',
+                'multiselect_descripcion' =>'required',
+                'multiselect_imagen' =>'required',
+                'multiselect_codigo' =>'required',
+                'multiselect_marca' =>'required',
+
         ], [
-            'nombre.required' => 'El campo nombre es obligatorio',
+            'precio.required' => 'El campo precio es obligatorio',
         ]);
-        producto::create([  //creando o insertando un registro en producto
-            'nombre' => $data['nombre'],
+
+        //print_r(json_encode($data) ) ; die;
+
+        $producto=producto::create([  //creando o insertando un registro en producto
+            
+            'surtido' =>$data['surtido'],
+            'fabricante_id' =>$data['multiselect_fabricante'],
+            'categoria_id' => $data['multiselect_categoria'],      
+            'precio' => $data['precio'],      
         ]);
+
+        
+        //multiples descripciones
+        foreach ($data['multiselect_descripcion'] as $valor){ 
+        
+                $descripcion=Descripcion::create([  
+                    'nombre' =>$valor, //$data['multiselect_descripcion'],
+                    'producto_id' => $producto->id,      
+                ]);
+        }
+
+                //multiples fotos
+        foreach ($data['multiselect_imagen'] as $valor){ 
+                $foto=Foto::create([  
+                    'nombre'  =>$valor,
+                    'url'  =>$valor,
+                    'producto_id' => $producto->id,      
+                ]);
+        }
+
+      
+                //multiples fotos
+        foreach ($data['multiselect_codigo'] as $valor){ 
+                $codigo=Codigo::create([  
+                    'nombre'  =>$valor,
+                    'producto_id' => $producto->id,      
+                ]);
+        }
+
+
+
+                //multiples variaciones
+        foreach ($data['multiselect_marca'] as $valor){ 
+                $codigo=Producto_Variacion::create([  
+                    'variacion_id'  =>$valor,
+                    'producto_id' => $producto->id,      
+                ]);
+        }
+
+
+
+       
+
         return redirect()->route('productos.index'); //redirigiendo a 
     }
+
+
+
+
+        /*
+        //return $productos;  //{"updated_at":"2020-07-16T11:43:13.000000Z","created_at":"2020-07-16T11:43:13.000000Z","id":16}
+
+            {"_token":"PBka2zyYpbTLwYEGlxIIotIq1dXuThvfFjHOdZH3",
+            "nombre":null,
+            "multiselect_fabricante":"1",
+            "multiselect_categoria":"1",
+            "multiselect_descripcion":["1","2"],
+            "multiselect_marca":["1","2","3","4","5","6","7","8","9","10"],"select-all-name":"0",
+            "multiselect_codigo":["3","4"],
+            "multiselect_imagen":["2","3"]}
+
+        */
+
+
+
 
 
     //editar producto

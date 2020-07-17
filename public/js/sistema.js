@@ -1,5 +1,339 @@
-    jQuery(document).ready(function($) {    
-        
+jQuery(document).ready(function($) {    
+
+idioma= (jQuery('.idioma').attr('idioma')!='') ? jQuery('.idioma').attr('idioma') : "es";
+
+////////////////////////recepcion o entrada/////////////////////////////////////
+
+
+
+        jQuery('#tabla_recepcion').DataTable( {
+              "processing": true,
+              "serverSide": true,
+              "ajax": "/busqueda_recepcion_temporal", //"scripts/server_processing.php"
+
+              "pageLength": 5, //numeros de filas por paginas
+
+              "language": {  //tratamiento de lenguaje
+                   "url": "/plugins/dataTables-1.10.21/Plugins/i18n/"+idioma+".lang",
+                },
+               "columnDefs": [
+                            
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.id;
+                                },
+                                "targets": [0] 
+                            },
+
+
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.productos.surtido;
+                                },
+                                "targets": [1] //codigo
+                            },
+
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.precio;
+                                },
+                                "targets": [2] //precio
+                            },
+
+
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.cantidad;
+                                },
+                                "targets": [3] //cantidad
+                            },
+
+
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.almacens.nombre;
+                                },
+                                "targets": [4] //almacen
+                            },
+
+
+
+                            {
+                                "render": function ( data, type, row ) {
+                                texto='<td>';
+                                    texto+='<a href="/eliminar_recepcion/'+row.id+'" type="button"';
+                                    texto+=' class="btn btn-danger btn-sm btn-block" >';
+                                        texto+=' <span class="oi oi-pencil">Eliminar</span>';
+                                    texto+=' </a>';
+                                texto+='</td>';
+
+                                    return texto;   
+                                },
+                                "targets": 5
+                            },
+
+
+
+                ],            
+              
+
+
+                } );
+
+////////////////////////nomenclador de productos/////////////////////////////////////
+
+
+$('#multiselect_marca, #multiselect_descripcion, #multiselect_codigo, #multiselect_imagen, #multiselect_categoria, #multiselect_fabricante').multiselect({
+
+   //seleccionar todos
+            includeSelectAllOption: true,   //para habilitar seleccionar todo
+            selectAllText : 'Seleccionar todos!', // texto q se muestra para "seleccionar todo"
+            selectAllValue: 0,                  //para controlar el "value" , para la opcion seleccionar todo
+            selectAllName : 'select-all-name', //para controlar el "name" , para la opcion seleccionar todo
+            selectAllJustVisible: false,   //este permite que se seleccionen todas las opciones con includeSelectAllOption, aunq no esten visibles
+           
+    //filtros
+            enableFiltering: true,  //habilitar o deshabilitar el filtro. 
+                                    //Se agregará un input  para filtrar dinámicamente todas las opciones.
+            enableCaseInsensitiveFiltering : true, //filtrado de forma sensible, May y Min
+
+            //enableFullValueFiltering : true , // cuando se filtra con esto, lo q prevalece es el orden de las letras q se van escribiendo
+                                               //https://github.com/davidstutz/bootstrap-multiselect/pull/555
+
+            filterBehavior: 'value',   //Filtrar las opciones por(valor, texto o ambos) value, text, both, 
+
+            filterPlaceholder: 'Filtrar', //Placeholder para el filtrado
+
+            maxHeight: 200,  //altura del menu
+            buttonWidth : '400px', //El ancho del botón de selección múltiple se puede corregir con esta opción.
+
+
+            buttonText: function(options, select) {   // callback que especifica el texto que se muestra en el botón en función de las opciones seleccionadas actualmente
+                    if (options.length === 0) {
+                        return 'No hay elementos seleccionados ...';
+                    }
+                    else if (options.length > 3) {
+                        return 'Más de 3 opciones seleccionadas!';
+                    }
+                     else {  //aqui va a mostrar las etiquetas seleccionadas
+                         var labels = [];
+                         options.each(function() {
+                             if ($(this).attr('label') !== undefined) {
+                                 labels.push($(this).attr('label'));  
+                             }
+                             else {
+                                 labels.push($(this).html());
+                             }
+                         });
+                         return labels.join(', ') + '';
+                     }
+                },
+
+
+                      
+});         
+
+
+
+
+
+
+ jQuery.ajax({
+        url:'/get_elementos_productos', //this returns object data
+        data:
+            {                     
+                valor: 1, //jQuery('select[modulo="fabricantes"]').val(),
+                modulo: 1, //jQuery('select[modulo="fabricantes"]').attr('modulo'),
+              }, 
+
+            headers: {
+                           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 },    
+        type:'GET',
+        datatype:'json',
+        success:function(data) { //data = {"0":{"id":1,"name":"Jason"},"1":{"id":2,"name":"Will"},"length":2 }
+          //console.log( (data.descripcion[0]) );
+         
+
+
+          //categoria
+          var datos = [];
+            $.each( data.categoria, function( key, valor ) {
+
+                      datos.push( {
+                                    label: (valor.nombre),
+                                    title: (valor.nombre),
+                                    value: valor.id, 
+                                    
+                       });
+            });
+            $('#multiselect_categoria').multiselect('dataprovider', datos);
+
+
+
+
+          //fabricante
+          var datos = [];
+            $.each( data.fabricante, function( key, valor ) {
+
+                      datos.push( {
+                                    label: (valor.nombre),
+                                    title: (valor.nombre),
+                                    value: valor.id, 
+                                    
+                       });
+            });
+            $('#multiselect_fabricante').multiselect('dataprovider', datos);
+
+
+
+          //variacion
+          var datos = [];
+            $.each( data.variacion, function( key, marca ) {
+                var group = {label: '' + marca.nombre, children: []};
+                //console.log( marca.nombre );
+                $.each( marca.modelo, function( key_marca, modelo ) {
+                    $.each( modelo.variacion, function( key_variacion, variacion ) {
+                       group['children'].push({
+                                    label: '' + (modelo.nombre) + ' ' + (variacion.nombre),
+                                    value: variacion.id, //(modelo.nombre) + ' ' + (variacion.nombre)+ ' ' + (variacion.motor.id),
+                                    
+                       });
+
+                    });      
+                 
+                 });
+
+                datos.push(group);
+            });
+
+            $('#multiselect_marca').multiselect('dataprovider', datos);
+
+
+
+
+          //descripcion
+          var datos = [];
+            $.each( data.descripcion, function( key, valor ) {
+
+                      datos.push( {
+                                    label: (valor.nombre),
+                                    title: (valor.nombre),
+                                    value: valor.nombre, 
+                                    
+                       });
+            });
+            $('#multiselect_descripcion').multiselect('dataprovider', datos);
+
+
+
+          //codigo
+          var datos = [];
+            $.each( data.codigo, function( key, valor ) {
+
+                      datos.push( {
+                                    label: (valor.nombre),
+                                    title: (valor.nombre),
+                                    value: valor.nombre, 
+                                    
+                       });
+            });
+            $('#multiselect_codigo').multiselect('dataprovider', datos);
+
+
+
+          //foto
+          var datos = [];
+            $.each( data.foto, function( key, valor ) {
+
+                      datos.push( {
+                                    label: (valor.nombre),
+                                    title: (valor.nombre),
+                                    value: valor.url, 
+                                    
+                       });
+            });
+            $('#multiselect_imagen').multiselect('dataprovider', datos);
+
+
+            
+            
+        }
+    });
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+
+
+
+   var path = "/busqueda_productos"; //"{{ url('search') }}";
+
+//Buscador de proyecto que aparece en el menu
+if ( $(".buscar_elemento").length > 0 ) {
+    var consulta_elemento = new Bloodhound({
+       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('nombre'),
+       queryTokenizer: Bloodhound.tokenizers.whitespace,
+       remote: {
+            url: '/busqueda_productos?key=%QUERY',
+            replace: function ( e ) {
+                var q = '/busqueda_productos?key='+encodeURIComponent(jQuery('.buscar_elemento').typeahead("val"));
+                    q += '&nombre='+encodeURIComponent(jQuery('.buscar_elemento.tt-input').attr("name"));
+                    q += '&idusuario='+encodeURIComponent(jQuery('.buscar_elemento.tt-input').attr("idusuario"));
+                return  q;
+            }
+        },   
+    });
+
+    consulta_elemento.initialize();
+    jQuery('.buscar_elemento').typeahead({
+               hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+            name: 'buscar_elemento',
+            displayKey: 'surtido', //
+            source: consulta_elemento.ttAdapter(),
+             templates: {
+                      suggestion: function (data) {  
+                        console.log(data);
+
+                          return '<p><strong>' + data.surtido + '</strong></p>'; //+
+        }
+      }
+    });
+
+
+    jQuery('.buscar_elemento').on('typeahead:selected', function (e, datum,otro) {
+        key = datum.key;
+        if  (datum.valor=='proyectos') {
+            window.location.href = '/'+'editar_proyecto/'+jQuery.base64.encode(key);  
+        } else {  //usuarios
+        }
+    }); 
+    jQuery('.buscar_elemento').on('typeahead:closed', function (e) {
+    }); 
+}    
+////////////////////////////////////////////////////////////////////////////
+
+  /*
+
+   if ( $("#search").length > 0 ) {
+     
+        $('#search').typeahead({
+             minLength: 2,
+            source:  function (query, process) {
+            return $.get(path, { query: query }, function (data) {
+                    return process(data);
+                });
+            }
+        });
+    }    
+*/
 
 
     var uno=['william','osmel'];
@@ -47,7 +381,7 @@ $.ajax({
 
         //$('#tabla').DataTable();
 
-        idioma= (jQuery('.idioma').attr('idioma')!='') ? jQuery('.idioma').attr('idioma') : "es";
+        
 
 /*
         jQuery.ajax({
@@ -745,18 +1079,44 @@ $.ajax({
                                 "render": function ( data, type, row ) {
                                         return row.id;
                                 },
-                                "targets": [0] 
+                                "targets": [0]  
                             },
 
 
                             { 
                                 "render": function ( data, type, row ) {
-                                        return row.nombre;
+                                        return row.codigos;
                                 },
                                 "targets": [1] 
                             },
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.descripciones;
+                                },
+                                "targets": [2] 
+                            },
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.marca;
+                                },
+                                "targets": [3] 
+                            },
 
-                          
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.modelo;
+                                },
+                                "targets": [4] 
+                            },                            
+
+                            { 
+                                "render": function ( data, type, row ) {
+                                        return row.variacion;
+                                },
+                                "targets": [5] 
+                            },
+
+                          /*
 
                             {
                                 "render": function ( data, type, row ) {
@@ -769,7 +1129,7 @@ $.ajax({
 
                                     return texto;   
                                 },
-                                "targets": 2
+                                "targets": 6
                             },
 
 
@@ -784,9 +1144,9 @@ $.ajax({
 
                                     return texto;   
                                 },
-                                "targets": 3
+                                "targets": 7
                             },
-
+                            */
 
 
                 ],            

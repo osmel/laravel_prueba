@@ -41,6 +41,7 @@ return [
 
 
 //almacenes
+"warehouse"=>"warehouse",
 "List of warehouse"=>"List of warehouse",
 "Create warehouse"=>"Create warehouse",
 "New warehouse"=>"New warehouse",
@@ -84,6 +85,41 @@ return [
 "Return to models list"=>"Return to models list",
 "Edit models"=>"Edit model",
 "Update models"=>"Update model",
+
+
+//productos
+"List of products"=>"List of products",
+"Create products"=>"Create product",
+"New products"=>"New product",
+"Return to products list"=>"Return to products list",
+"Edit products"=>"Edit product",
+"Update products"=>"Update product",
+
+//categorias
+"List of manufacturers"=>"List of manufacturers",
+"Create manufacturers"=>"Create maker",
+"New manufacturers"=>"New maker",
+"Return to manufacturers list"=>"Return to manufacturers list",
+"Edit manufacturers"=>"Edit maker",
+"Update manufacturers"=>"Update maker",
+
+//categorias
+"List of motors"=>"List of motors",
+"Create motors"=>"Create motor",
+"New motors"=>"New motor",
+"Return to motors list"=>"Return to motors list",
+"Edit motors"=>"Edit motor",
+"Update motors"=>"Update motor",
+
+
+
+
+
+"reception"=>"Reception",
+
+"codigo"=>"Code",
+"precio"=>"price",
+"cantidad"=>"quantity",
 
 
 

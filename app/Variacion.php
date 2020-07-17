@@ -37,5 +37,7 @@ class Variacion extends Model
         return $this->belongsToMany(Producto::class);
     }
 
+
+
     
 }

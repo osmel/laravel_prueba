@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-end mb-3">
-        <h1 class="pb-1">{{ trans('aplicacion.List of categories') }}</h1>
+        <h1 class="pb-1">{{ trans('aplicacion.List of manufacturers') }}</h1>
         <p>
-            <a href="{{ route('fabricantes.create') }}" class="btn btn-primary">{{ trans('aplicacion.New categories') }}</a>
+            <a href="{{ route('fabricantes.create') }}" class="btn btn-primary">{{ trans('aplicacion.New manufacturers') }}</a>
         </p>
     </div>
 

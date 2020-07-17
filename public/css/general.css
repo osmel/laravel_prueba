@@ -48,3 +48,169 @@ body{
 .link-enlace:hover{
 	color:white;
 }
+
+
+
+/* agregado */
+.xycard{	 text-align: center;
+			  
+
+		}
+
+.marco_producto {
+						border: 1px solid #C4C4C4;
+						border-radius: 10px ;
+						box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
+					    text-align: center;
+					    overflow: hidden;
+					    float: left;
+					    
+						
+						position: relative;
+					    width: 280px;
+					    height: 410px;
+					    overflow: hidden;
+					   
+					    padding: 4px;
+					    margin: 2px;
+					}
+
+.marco_producto:hover {
+
+  transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  -webkit-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79); 
+box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79);
+transition-duration:0.6s;
+    
+}
+.infoExtra {
+				margin: 1px;
+				font-size: .7em;
+				float: none;
+				display: block;
+				color: #2D6AB3;
+			}
+
+.EtiDescuento {
+					position: absolute; 
+					left: -45px; 
+					top:20px; 
+					background: red; 
+					color:white;
+					text-align: center;
+					font-size: 2em;
+					width: 180px;
+					-webkit-transform: rotate(-45deg); 
+			        -moz-transform: rotate(-45deg); 
+			        -ms-transform: rotate(-45deg); 
+			        -o-transform: rotate(-45deg); 
+			        transform: rotate(-45deg); 
+			        
+			        -webkit-transform-origin: 50% 50%; 
+			        -moz-transform-origin: 50% 50%; 
+			        -ms-transform-origin: 50% 50%; 
+			        -o-transform-origin: 50% 50%; 
+			        transform-origin: 50% 50%; 
+			  }
+
+.marco_foto {
+			width: 98%;
+			height: 112px;
+			text-align: center;
+			padding: 6px;
+			 
+			overflow: hidden;
+	}
+
+	@supports(object-fit: scale-down){
+    .marco_foto img{
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      padding: 2px;
+    }
+
+.fotoGL	{
+    			width: 200px;
+    			height: 200px;	
+    		}
+
+.precio {  text-align: right;
+				padding-top: 1px;
+				padding-right: 10px;
+				float: right;
+			   color: blue;
+			   font-size: 1.4em;
+			   height: 24px;
+			   margin: 0px;
+			   width: 100%;
+			 }
+
+.precViej {
+				float: right; 
+				margin-right:10px;
+				color: red;
+				text-decoration:line-through;
+	}				
+
+.EtiDescuento {
+					position: absolute; 
+					left: -45px; 
+					top:20px; 
+					background: red; 
+					color:white;
+					text-align: center;
+					font-size: 2em;
+					width: 180px;
+					-webkit-transform: rotate(-45deg); 
+			        -moz-transform: rotate(-45deg); 
+			        -ms-transform: rotate(-45deg); 
+			        -o-transform: rotate(-45deg); 
+			        transform: rotate(-45deg); 
+			        
+			        -webkit-transform-origin: 50% 50%; 
+			        -moz-transform-origin: 50% 50%; 
+			        -ms-transform-origin: 50% 50%; 
+			        -o-transform-origin: 50% 50%; 
+			        transform-origin: 50% 50%; 
+			  }
+
+.descripcion { 	padding: 5px;
+					font-size: .8em;
+					text-align: justify;
+					
+					height: 60px;
+					overflow: hidden;
+				 }
+.descripcion p { color: #0055ff; 
+					 margin-top: 0px;}	
+
+/* fin de agregado */
+
+
+.agregar_cesta { margin: 0 auto;
+       width: 100%;
+       height: 65px;
+       max-height: 65px;
+       font-size: 1 em; 
+       display: block; 
+       background: none;
+       border: none;
+       padding: 2px;
+       overflow: hidden;
+      }
+
+.agregar_cesta:hover  {background: #dde6ff;border-color: #a0a7b9;}      
+
+
+
+.cantCarProd {
+      display: none;
+      text-align: center;
+      width: 100%;
+      margin: 4px;
+  }
+
+.agregar_cesta:hover >.cantCarProd{
+      display: block;
+  }

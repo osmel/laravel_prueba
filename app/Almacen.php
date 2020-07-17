@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Inventario;
 use Illuminate\Database\Eloquent\Model;
+
+
 
 class Almacen extends Model
 {
@@ -13,8 +16,16 @@ class Almacen extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'id','nombre',
     ];
 
+
+    public function inventario() {
+        return $this->belongsToMany(Inventario::class);
+    }
+
+
+
+    
 
 }

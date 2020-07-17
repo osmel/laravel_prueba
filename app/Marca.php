@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Modelo;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,4 +15,12 @@ class Marca extends Model
     protected $fillable = [
         'nombre', //'modelo_id',
     ];
+
+
+ 	////belongsTo
+    public function modelo()   { 
+        //return $this->belongsTo(Marca::class, 'marca_id','id'); 
+        return $this->hasMany(Modelo::class, 'marca_id','id'); 
+    }   
+
 }
