@@ -22,7 +22,7 @@ class ProductosSeeder extends Seeder
 	            'fabricante_id'=>$index,
 	            'categoria_id'=>$index,
 	            'precio'=>100+$index,
-
+	            'surtido'=>9000+$index,
 	            
 	        ]);
 		};   

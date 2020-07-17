@@ -22,6 +22,7 @@
 
 
 //almacenes
+"warehouse"=>"Almacén",
 "List of warehouse"=>"Lista de almacenes",
 "Create warehouse"=>"Crear almacén",
 "New warehouse"=>"Nuevo almacén",
@@ -65,8 +66,40 @@
 "Edit models"=>"Editar modelo",
 "Update models"=>"Actualizar modelo",
 
+//productos
+"List of products"=>"Lista de productos",
+"Create products"=>"Crear producto",
+"New products"=>"Nuevo producto",
+"Return to products list"=>"Regresar a Lista de productos",
+"Edit products"=>"Editar producto",
+"Update products"=>"Actualizar producto",
 
 
+
+
+
+//fabricantes
+"List of manufacturers"=>"Lista de fabricantes",
+"Create manufacturers"=>"Crear fabricante",
+"New manufacturers"=>"Nuevo fabricante",
+"Return to manufacturers list"=>"Regresar a Lista de fabricantes",
+"Edit manufacturers"=>"Editar fabricante",
+"Update manufacturers"=>"Actualizar fabricante",
+
+//motores
+"List of motors"=>"Lista de motores",
+"Create motors"=>"Crear motor",
+"New motors"=>"Nuevo motor",
+"Return to motors list"=>"Regresar a Lista de motores",
+"Edit motors"=>"Editar motor",
+"Update motors"=>"Actualizar motor",
+
+
+"reception"=>"Recepción",
+
+"codigo"=>"Código",
+"precio"=>"Precio",
+"cantidad"=>"Cantidad",
 
 
 

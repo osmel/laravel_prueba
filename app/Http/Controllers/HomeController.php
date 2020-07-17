@@ -4,7 +4,18 @@ namespace App\Http\Controllers;
 
 Use App\Producto;
 
+Use App\Categoria;
 Use App\Fabricante;
+
+Use App\Marca;
+Use App\Modelo;
+Use App\Variacion;
+
+Use App\Descripcion;
+Use App\Foto;
+
+Use App\Codigo;
+
 /*
 Use App\Marca;
 Use App\Codigo;
@@ -59,7 +70,7 @@ class HomeController extends Controller
 
         //dd($carrito);
 
-        $producto= Producto::paginate(10); //paginate(2); //simplePaginate//all(); //->take(10);         
+        $producto= Producto::paginate(9); //paginate(2); //simplePaginate//all(); //->take(10);         
 
         if ($request->ajax()){            //pregunta si el request es mediante ajax
                //vamos a enviar una respuesta de tipo json... vamos a responder con el partial q hemos creado
@@ -199,6 +210,19 @@ class HomeController extends Controller
 
             }, '>=', 1)
 
+
+
+            ->orWhereHas('descripcion', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('descripcions.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)
+
+
             ->orWhereHas('codigo', 
                   function (Builder $query) use ($busq) {
                     $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
@@ -227,7 +251,7 @@ class HomeController extends Controller
                          }      
                     });
 
-            }, '>=', 1)->paginate(10);
+            }, '>=', 1)->paginate(9);
 
             //dd($productos); 
 
@@ -265,6 +289,76 @@ class HomeController extends Controller
 
     }
 
+
+ public function resultado(Request $request)
+    {
+
+
+       $data['key']=$request->get('key'); 
+       $data['nombre']=$request->get('nombre'); 
+        /*
+       if ( isset($request->get('idusuario')) ) { 
+        $data['idusuario']=$request->get('idusuario');
+       } 
+       */
+
+       $result=[];
+      switch ($data['nombre']) {
+        case 'editando_proyectos':
+            $result=Fabricante::where('nombre', 'LIKE', "%{$data['key']}%")->get();
+            return $result;
+          break;
+        default:
+             $result=Fabricante::where('nombre', 'LIKE', "%{$data['key']}%")->get();
+          break;
+       }
+        return response()->json($result);
+
+    }      
+
+
+
+
+
+
+ public function get_elementos_productos(Request $request)
+    {
+
+
+
+         $resultado['categoria']= Categoria::get(); 
+         $resultado['fabricante']= Fabricante::get(); 
+
+          $resultado['variacion'] = Marca::with([
+           'modelo' => function($query)   {
+               $query->select('*')
+               ->with([
+                   'variacion' => function($query)   {
+                       $query->select('*')
+                       ->with([
+                           'motor' => function($query)   {
+                               $query->select('*');
+                           },  
+                        ]);
+                   },  
+                ]);  
+            },  
+        ])
+          ->get(); 
+
+
+
+         $resultado['descripcion']= Descripcion::get();  
+         $resultado['codigo']= Codigo::get(); 
+         $resultado['foto']= Foto::get(); 
+         
+
+        return response()->json( $resultado);
+
+   }      
+
+
+ 
 
 
 

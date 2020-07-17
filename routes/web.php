@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder; 
+
 use App\Role as Perfil;
+
 
 use App\Marca;
 use App\Modelo;
@@ -17,6 +20,7 @@ use App\Motor;
 
 use App\Producto;
 
+Use App\Movimiento;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +76,58 @@ Route::group(['middleware' => ['idiomas']], function () {
        //eliminar    
     Route::get('/eliminar_usuario/{user}', 'InicioController@eliminar_usuario');
     //Route::delete('/usuarios/{user}', 'InicioController@destroy')->name('users.destroy');
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////Inventarios////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////    
+    Route::get('/inventario', 'InventarioController@index')
+    ->name('inventario.index');
+
+    Route::get('busqueda_productos','InventarioController@busqueda_productos')
+        ->name('predictivo.busqueda_productos');
+
+
+    Route::POST('/inventario/crear', 'InventarioController@store_entrada') //validacion creacion de nuevo usuario
+        ->name('inventario.crear');    
+
+
+    Route::get('busqueda_recepcion_temporal', function () {   
+        $authors = Movimiento::where('user_id', (Auth::user()->id)  )
+                    ->with(['almacens','productos']); //'almacens'
+        return DataTables::eloquent($authors)->toJson();
+    });    
+
+
+       //eliminar    
+    Route::get('/eliminar_recepcion/{movimiento}', 'InventarioController@eliminar_recepcion');
+
+    
+    Route::POST('/inventario/entrada_existencia', 'InventarioController@entrada_existencia') //validacion creacion de nuevo usuario
+        ->name('inventario.entrada_existencia');
+  
+    
+
+
+
+
+/*
+       //nuevo
+    Route::get('/usuarios/nuevo', 'InicioController@create') //crear nuevo usuario
+        ->name('users.create');
+    Route::POST('/usuarios/crear', 'InicioController@store') //validacion creacion de nuevo usuario
+        ->name('users.crear');
+
+        //editar
+    Route::get('/usuarios/{user}/editar', 'InicioController@edit') //editar usuario
+        ->name('users.edit');
+    Route::put('/usuarios/{user}', 'InicioController@update'); //validacion edicion de usuario
+
+       //eliminar    
+    Route::get('/eliminar_usuario/{user}', 'InicioController@eliminar_usuario');
+    //Route::delete('/usuarios/{user}', 'InicioController@destroy')->name('users.destroy');
+*/
         
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////catalogos///////////////////////////////
@@ -97,6 +153,7 @@ Route::group(['middleware' => ['idiomas']], function () {
 
        //eliminar    
     Route::get('/eliminar_perfil/{perfil}', 'CatalogosController@eliminar_perfil');
+
 
 
   Route::get('api/resultado_perfiles', function () {
@@ -425,26 +482,42 @@ Route::group(['middleware' => ['idiomas']], function () {
        //eliminar    
     Route::get('/eliminar_producto/{producto}', 'CatalogosController@eliminar_producto');
 
-    /*
-  Route::get('api/resultado_productos', function () {
-        $data = request()->all();
+  
+        
+/////////////////////////////////modal_imagen///////////////////////////////////////
 
-      return datatables()
-            ->eloquent(producto::query())
-            ->filter(function ($query) {
-                $cadena = request('search')['value'];                
-                if ($cadena!='') {
-                    $query->where('nombre', 'like', "%" . request('search')['value'] . "%");
-                    
-                }
-                
+Route::get('/modal_imagen/{producto}/', 'HomeController@modal_imagen') 
+        ->name('modal.imagen');
 
-            })
-            ->toJson();
-});
+Route::POST('/cambio_imagen_modal/{producto}/', 'HomeController@cambio_imagen_modal') 
+        ->name('modal.cambio');
 
 
 
+///////////////Busqueda predictiva por typeahead/////////////////
+
+Route::get('resultado','HomeController@resultado');
+
+
+
+Route::get('get_elementos_productos','HomeController@get_elementos_productos')
+    ->name('get.elementos_productos');
+
+
+
+///////////////////////////////busqueda///////////////////////////////////////////
+Route::get('/buscar/', 'HomeController@buscar') 
+        ->name('busqueda.predictiva');
+
+/////////////session de lo que tiene en la cesta cada usuario/////////////////////
+Route::POST('/session_producto/', 'HomeController@session_producto') 
+        ->name('session.producto');
+
+
+
+//filtro https://www.itsolutionstuff.com/post/custom-filter-search-with-laravel-datatables-exampleexample.html
+Route::get('api/resultado_productos', function () {
+    $busq=explode(' ', request('search.value'));
 
 
             $productos = Producto::whereHas('variacions.modelo.marca', 
@@ -460,52 +533,105 @@ Route::group(['middleware' => ['idiomas']], function () {
 
             }, '>=', 1)
 
+            ->orWhereHas('descripcion', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('descripcions.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)            
+
+            ->orWhereHas('codigo', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('codigos.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)
+
+            ->orWhereHas( 'fabricante', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('fabricantes.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)
+
+            ->orWhereHas('categoria', 
+                  function (Builder $query) use ($busq) {
+                    $query->Where(function ($query) use($busq) { //este simula un like con un whereIn
+                         for ($i = 0; $i < count($busq); $i++){
+                            $query->orwhere('categorias.nombre', 'like',  '%' . $busq[$i] .'%');
+                         }      
+                    });
+
+            }, '>=', 1)->get();
+ 
+
+            return DataTables::of($productos)
+                    ->addIndexColumn()
+                        ->filter(function ($query) use ($busq) {  
+                            return true; //ya verifique encima
+                        }) 
+
+                    ->addColumn('codigos', function($row){
+                        $variacion='';
+                        foreach ($row['codigo'] as $key => $value) {
+                            $variacion.=$value->nombre. ( (( count($row['codigo'])-1) == $key ) ? '' : ',') ;
+                        }
+                         
+                            return $variacion;
+                    })                        
+
+                    
+                    ->addColumn('descripciones', function($row){
+                        $variacion='';
+                        foreach ($row['descripcion'] as $key => $value) {
+                            $variacion.=$value->nombre. ( (( count($row['descripcion'])-1) == $key ) ? '' : ',') ;
+                        }
+                         
+                            return $variacion;
+                    })                        
+
+                    ->addColumn('marca', function($row){
+                        $variacion='';
+                        foreach ($row['marca'] as $key => $value) {
+                            $variacion.=$value->nombre. ( (( count($row['marca'])-1) == $key ) ? '' : ',') ;
+                        }
+                         
+                            return $variacion;
+                    })
+                    ->addColumn('modelo', function($row){
+                        $variacion='';
+                        foreach ($row['modelo'] as $key => $value) {
+                            $variacion.=$value->nombre . ( (( count($row['modelo'])-1) == $key ) ? '' : ',') ;
+                        }
+                         
+                            return $variacion;
+                    })                    
+                        
+                    ->addColumn('variacion', function($row){
+                        $variacion='';
+                        foreach ($row['variacions'] as $key => $value) {
+                            $variacion.=$value->nombre. ( (( count($row['variacions'])-1) == $key ) ? '' : ',') ;
+                        }
+                         
+                            return $variacion;
+                    })
+                    //->rawColumns(['nombre_mio'])
+                    ->make(true);
+
+
+});
 
 
 
-  */
-
-
-        Route::get('api/resultado_productos', function () {
-
-            $model = App\Producto::with('posts');
-
-            return DataTables::eloquent($model)
-                        ->addColumn('posts', function (User $user) {
-                            return $user->posts->map(function($post) {
-                                return str_limit($post->title, 30, '...');
-                            })->implode('<br>');
-                        })
-                        ->toJson();
-
-
-        });
-
-
-
-        
-/////////////////////////////////modal_imagen///////////////////////////////////////
-
-Route::get('/modal_imagen/{producto}/', 'HomeController@modal_imagen') 
-        ->name('modal.imagen');
-
-Route::POST('/cambio_imagen_modal/{producto}/', 'HomeController@cambio_imagen_modal') 
-        ->name('modal.cambio');
-
-
-///////////////////////////////busqueda///////////////////////////////////////////
-Route::get('/buscar/', 'HomeController@buscar') 
-        ->name('busqueda.predictiva');
-
-/////////////session de lo que tiene en la cesta cada usuario/////////////////////
-Route::POST('/session_producto/', 'HomeController@session_producto') 
-        ->name('session.producto');
-
-
-/*
-Route::get('/perfiles', 'CatalogosController@index_perfil')
-    ->name('perfiles.index');
-*/
 
 ///////////////////////////////////////////////////////////////////////////////////////
 

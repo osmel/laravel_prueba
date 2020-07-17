@@ -67,7 +67,7 @@ class InicioController extends Controller
 
         //dd($carrito);
 
-        $producto= Producto::paginate(10); //paginate(2); //simplePaginate//all(); //->take(10);   
+        $producto= Producto::paginate(9); //paginate(2); //simplePaginate//all(); //->take(10);   
 
         if ($request->ajax()){            //pregunta si el request es mediante ajax
                //vamos a enviar una respuesta de tipo json... vamos a responder con el partial q hemos creado

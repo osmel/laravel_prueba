@@ -3,9 +3,14 @@
 namespace App;
 
 use App\Role;
+use App\Movimiento;
+Use App\Inventario;
+
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+
 
 class User extends Authenticatable
 {
@@ -54,6 +59,20 @@ class User extends Authenticatable
         } 
         return false;
     }
+
+
+
+    ////belongsTo
+
+    public function inventario()   { 
+        return $this->hasMany(Inventario::class); 
+    }   
+
+
+    public function movimientos()   { 
+        return $this->hasMany(Movimiento::class);  //'producto_id', , 'id'
+    }   
+
 
 
 }

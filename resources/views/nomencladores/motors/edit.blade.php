@@ -2,7 +2,7 @@
 @section('title', "Editar usuario")
 
 @section('content')
-    <h1>{{ trans('aplicacion.Edit categories') }}</h1>
+    <h1>{{ trans('aplicacion.Edit motors') }}</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -27,8 +27,8 @@
        
 
         
-        <button type="submit"  class="btn btn-primary">{{ trans('aplicacion.Update categories') }}</button>
-        <a href="{{ route('motors.index') }}" class="btn btn-danger">{{ trans('aplicacion.Return to categories list') }}</a>
+        <button type="submit"  class="btn btn-primary">{{ trans('aplicacion.Update motors') }}</button>
+        <a href="{{ route('motors.index') }}" class="btn btn-danger">{{ trans('aplicacion.Return to motors list') }}</a>
         
         
     </form>

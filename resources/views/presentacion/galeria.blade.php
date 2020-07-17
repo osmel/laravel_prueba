@@ -1,42 +1,25 @@
-<style>
-  .agregar_cesta { margin: 0 auto;
-           width: 90%;
-           height: 45px;
-           font-size: 1.2em; 
-           display: block; 
-
-          }
-
-  .agregar_cesta:hover  {background: #dde6ff;border-color: #a0a7b9;}      
-
  
-
-  .cantCarProd {
-          display: none;
-          float: left;
-          width: 64px;
-      }
-
-   .agregar_cesta:hover >.cantCarProd{
-          display: block;
-      }
-
-</style>  
 
 {{-- cesta--}}
     
 
 <div id="mi_galeria">
   @include('presentacion.cesta2')
-    <div class="card-columns" >
+    <div class="xycard" >
         @foreach($producto as $indice =>$prod) 
-          <div class="card">
-                <div class="card-header text-right">
+          <div class="marco_producto" >
+              <div class="EtiDescuento">
+                  10%
+              </div>
+              <div class="precViej">
+                  {{$prod->precio}}
+                </div>
+                <div class="precio">
                   {{$prod->precio}}
                 </div>
                 <div class="marco_foto">
-                   <a class="modal_imagen"  title="Detalle" data-remoto="/modal_imagen/{{$prod->id}}" data-toggle="modal" data-target="#modalMessage" >
-                     <img  src="images/piezas/{{{ (!(isset($prod->foto[0]->url))) ? 'sinimagen.png' : $prod->foto[0]->url}}}" class="NOimageTOzoom" alt="imagen con zoom" data-overlay="" width="160" height="120" >
+                   <a class="modal_imagen marco_foto"  title="Detalle" data-remoto="/modal_imagen/{{$prod->id}}" data-toggle="modal" data-target="#modalMessage" >
+                     <img  src="images/piezas/{{{ (!(isset($prod->foto[0]->url))) ? 'sinimagen.png' : $prod->foto[0]->url}}}" class="NOimageTOzoom" alt="imagen" data-overlay=""  >
                    </a>
                 </div>   
                 <div class="card-body">
@@ -44,18 +27,15 @@
                       {{{ (!(isset($prod->descripcion[0]->nombre))) ? '-' : $prod->descripcion[0]->nombre}}}
                       {{--     $prod->descripcion->nombre --}}
                     </h5>
-                    <p class="card-text">   </p>
                 </div>
                 <div class="card-footer">
-                      <small class="text-muted">Fabricante: {{$prod->fabricante->nombre}}</small>
+                  <div class="infoExtra">Fabricante: {{$prod->fabricante->nombre}}</div>
+                  <div class="infoExtra">Código: 087868756464576745</div>
                 </div>
 
-
-
-
                   <button class="agregar_cesta fas fa-shopping-cart" id_producto="{{$prod->id}}" >
-                              <input class="cantCarProd" value="1" type="text" placeholder="cantidad"> 
                               <div class="TextAgr">Agregar</div>
+                              <div class="cantCarProd"><input  value="1" type="text" placeholder="cantidad"> </div>
                   </button>
 
 

@@ -53,7 +53,13 @@
     {{-- CSS datatables--}}
     <link rel="stylesheet" href="{{ asset('plugins/dataTables-1.10.21/DataTables-1.10.21/css/jquery.dataTables.min.css') }}">
 
+    {{--bootstrap-select selectpicker 
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.min.css')}}">        
+    
+     --}}
 
+
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-select/dist/css/bootstrap-select.min.css')}}">        
 
 
 
@@ -73,6 +79,10 @@
     {{--jquery --}}
     <script type="text/javascript" src="{{ asset('plugins/jquery/jquery-2.1.4.js') }}"></script>
 
+
+    {{--popper esto es para q funcione bien bootstrap --}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+
     {{--version bootstrap-4.5.0--}}
     <script type="text/javascript" src="{{ asset('plugins/bootstrap-4.5.0/dist/js/bootstrap.js') }}"></script>
     {{--seleccion intuitiva --}}
@@ -89,6 +99,27 @@
     <script type="text/javascript" src="{{ URL::to('js/sistema.js') }}"></script>
 
     
+
+{{-- plugins de lupa--}}
+<script type="text/javascript" src="{{ URL::to('plugins/lupa/jquery.mlens-1.7.min.js') }}"></script>
+
+
+
+
+    {{--busqueda sensitiva
+    <link rel="stylesheet" href="<?php echo base_url(); ?>js/bootstrap-3.3.1/dist/css/typeahead.js-bootstrap.css">
+
+    --}}
+
+    <script type="text/javascript" src="{{ asset('plugins/typeahead/dist/typeahead.jquery.min.js')}}"></script>  
+    <script type="text/javascript" src="{{ asset('plugins/typeahead/dist/typeahead.bundle.js')}}"></script>    
+
+    {{--bootstrap-select selectpicker 
+        https://developer.snapappointments.com/bootstrap-select/
+    --}}
+
+    <script type="text/javascript" src="{{ asset('plugins/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
+
 
 </body>
 </html>

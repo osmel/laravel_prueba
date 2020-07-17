@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-end mb-3">
-        <h1 class="pb-1">{{ trans('aplicacion.List of categories') }}</h1>
+        <h1 class="pb-1">{{ trans('aplicacion.List of products') }}</h1>
         <p>
-            <a href="{{ route('productos.create') }}" class="btn btn-primary">{{ trans('aplicacion.New categories') }}</a>
+            <a href="{{ route('productos.create') }}" class="btn btn-primary">{{ trans('aplicacion.New products') }}</a>
         </p>
     </div>
 
@@ -19,9 +19,16 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">{{ trans('autenticacion.Name') }}</th>
+            <th scope="col">{{ trans('aplicacion.Codigo') }}</th>
+            <th scope="col">{{ trans('aplicacion.Descripciones') }}</th>
+            <th scope="col">{{ trans('aplicacion.Marca') }}</th>
+            <th scope="col">{{ trans('aplicacion.Modelo') }}</th>
+            <th scope="col">{{ trans('aplicacion.Variacion') }}</th>
+
+            {{--
             <th scope="col">{{ trans('aplicacion.Edit') }}</th>
-            <th scope="col">{{ trans('aplicacion.Remove') }}</th>            
+            <th scope="col">{{ trans('aplicacion.Remove') }}</th> 
+            --}}           
         </tr>
         </thead>
       
