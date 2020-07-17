@@ -50,6 +50,8 @@ class InicioController extends Controller
 
     public function dashboard(Request $request) { //index
 
+        //dd('asd');
+
         if ($request->session()->has('arreglo')) { 
             $arr =  [] ;
             foreach ($request->session()->get('arreglo') as $llave => $valor) {

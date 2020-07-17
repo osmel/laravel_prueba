@@ -162,13 +162,15 @@ class InventarioController extends Controller
 
       foreach ($movimientos as $valor){ 
         //print_r($valor->id);
+            /*
             $inventario = Inventario::updateOrCreate(
                 ['producto_id' => $valor->producto_id ],
                 ['user_id' => (Auth::user()->id)]
             );
+            */
 
 
-            $anterior = Almacen_Inventario::where('inventario_id',$inventario->id)
+            $anterior = Almacen_Inventario::where('producto_id',$valor->producto_id)
                                             ->where('almacen_id', $valor->almacen_id)
                                             ->where( 'precio' ,$valor->precio)
                                             ->first();
@@ -177,7 +179,7 @@ class InventarioController extends Controller
              $new_cantidad = (isset($anterior->cantidad)) ? $valor->cantidad+$anterior->cantidad : $valor->cantidad;
 
            $pivot = Almacen_Inventario::updateOrCreate(
-                ['inventario_id' => $inventario->id,'almacen_id' => $valor->almacen_id,'precio' => $valor->precio  ],
+                ['producto_id' => $valor->producto_id,'almacen_id' => $valor->almacen_id,'precio' => $valor->precio  ],
                 ['cantidad' => $new_cantidad ]
             );
 

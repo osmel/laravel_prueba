@@ -42,7 +42,7 @@ class Producto extends Model
 //hasOne
     
     public function inventario() {
-      return $this->hasOne(Inventario::class);
+      return $this->hasOne(Inventario::class,'producto_id');
     }
     
 

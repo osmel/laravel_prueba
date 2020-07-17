@@ -24,4 +24,8 @@ class Almacen extends Model
         return $this->belongsToMany(Inventario::class);
     }
 
+
+
+    
+
 }

@@ -16,6 +16,12 @@ Use App\Foto;
 
 Use App\Codigo;
 
+
+Use App\Movimiento;
+Use App\Inventario;
+
+Use App\Almacen_Inventario;
+
 /*
 Use App\Marca;
 Use App\Codigo;
@@ -46,11 +52,14 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        //dd ( $request->session()->all() );
-        //$request->session()->forget('arreglo.1') ;
-        //$request->session()->flush();
-        //dd ( $request->session()->forget('arreglo') );
-        //dd ( $request->session()->get('arreglo') );
+        /*
+           $inventario = Almacen_Inventario::with([
+           'producto' => function($query)  {
+               $query->select('*');
+               //->withPivot('almacen_id','inventario_id');
+           },   
+           ])->get();    
+           */
 
 
         if ($request->session()->has('arreglo')) { 
@@ -70,7 +79,17 @@ class HomeController extends Controller
 
         //dd($carrito);
 
-        $producto= Producto::paginate(9); //paginate(2); //simplePaginate//all(); //->take(10);         
+        $producto= Producto::paginate(9); //paginate(2); //simplePaginate//all(); //->take(10);     
+
+          /*
+           $producto = Almacen_Inventario::with([
+           'producto' => function($query)  {
+               $query->select('*');
+               //->withPivot('almacen_id','inventario_id');
+           },   
+           ])->paginate(9);
+           */
+           //dd($producto);
 
         if ($request->ajax()){            //pregunta si el request es mediante ajax
                //vamos a enviar una respuesta de tipo json... vamos a responder con el partial q hemos creado

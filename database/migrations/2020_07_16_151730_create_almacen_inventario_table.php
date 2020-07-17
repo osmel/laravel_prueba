@@ -18,10 +18,15 @@ class CreateAlmacenInventarioTable extends Migration
 
             $table->increments('id');
   
-            $table->integer('inventario_id')->unsigned();
+
+             $table->integer('producto_id')->unsigned();  //esto es para registrar, quien es el ultimo usuario q toca el inventario
+             $table->foreign('producto_id')->references('id')->on('productos');
+
+  
+            //$table->integer('inventario_id')->unsigned();
             $table->integer('almacen_id')->unsigned();
 
-            $table->foreign('inventario_id')->references('id')->on('inventarios');
+            //$table->foreign('inventario_id')->references('id')->on('inventarios');
             $table->foreign('almacen_id')->references('id')->on('almacens');
 
             $table->decimal('precio', 8, 2);    
