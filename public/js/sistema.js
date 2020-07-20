@@ -1302,7 +1302,8 @@ $.ajax({
     jQuery(document).on('click', '.pagination a', function(e){
           e.preventDefault();  //parar la accion del evento
           var num_page = $(this).attr('href').split('page=')[1];
-          var ruta ="http://autos.dev.com/";  //   /index
+          //var ruta ="http://autos.dev.com/";  //   /index
+          var ruta ="/";  
           //console.log(num_page);
           jQuery.ajax({
                       url :  ruta,
