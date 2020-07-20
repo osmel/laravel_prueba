@@ -103,4 +103,11 @@
 
 
 
+"descripciones"=>"Descripciones",
+"model"=>"Modelo",
+"variations"=>"Variación",
+"marca"=>"Marca",
+
+
+
 ];

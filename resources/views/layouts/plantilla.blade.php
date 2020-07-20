@@ -51,7 +51,7 @@
     <div id="app">
         
         {{-- Navegacion--}}
-        @include('layouts.nav_bar');
+        @include('layouts.nav_bar')
 
 
 

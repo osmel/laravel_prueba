@@ -68,7 +68,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => 2,
+            'role_id' => null, //no tiene almacen porq es usuario registrado por fuera
+            'almacen_id' => null, //no tiene almacen porq es usuario registrado por fuera
         ]);
     }
 }

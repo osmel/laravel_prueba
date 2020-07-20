@@ -1,5 +1,10 @@
 @extends('layouts.plantilla')
 @section('content')
+
+{{-- carrousel--}}
+@include('layouts.carrousel')
+
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -11,6 +16,8 @@
                             {{ session('status') }}
                         </div>
                     @endif
+
+
                     @include('presentacion.galeria') 
                 </div>
             </div>

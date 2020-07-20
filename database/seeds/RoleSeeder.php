@@ -18,8 +18,12 @@ class RoleSeeder extends Seeder
         ]);
 
     	DB::table('roles')->insert([
-            'nombre_rol'=>'otro'
+            'nombre_rol'=>'Almacenista'
         ]);
-
+        /*
+        DB::table('roles')->insert([
+            'nombre_rol'=>'usuario'  //cliente q se registra por fuera del sistema
+        ]);        
+        */
     }
 }

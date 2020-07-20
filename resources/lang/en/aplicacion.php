@@ -121,6 +121,10 @@ return [
 "precio"=>"price",
 "cantidad"=>"quantity",
 
+"descripciones"=>"Descriptions",
+"model"=>"Model",
+"variations"=>"Variations",
+"marca"=>"Brand",
 
 
 

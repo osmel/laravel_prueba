@@ -9,28 +9,32 @@
         @foreach($producto as $indice =>$prod) 
           <div class="marco_producto" >
               <div class="EtiDescuento">
-                  10%
+                  {{$prod->descuento}}%
               </div>
-              <div class="precViej">
+                <div class="precViej">
                   {{$prod->precio}}
                 </div>
                 <div class="precio">
-                  {{$prod->precio}}
+                  {{   number_format(  ($prod->precio -((($prod->precio * $prod->descuento   ) ) / 100))  , 2, '.', '')   }}
                 </div>
                 <div class="marco_foto">
-                   <a class="modal_imagen marco_foto"  title="Detalle" data-remoto="/modal_imagen/{{$prod->id}}" data-toggle="modal" data-target="#modalMessage" >
-                     <img  src="images/piezas/{{{ (!(isset($prod->foto[0]->url))) ? 'sinimagen.png' : $prod->foto[0]->url}}}" class="NOimageTOzoom" alt="imagen" data-overlay=""  >
+                   <a class="modal_imagen marco_foto"  title="Detalle" data-remoto="/modal_imagen/{{$prod->producto->id}}" data-toggle="modal" data-target="#modalMessage" >
+                     <img  src="images/piezas/{{{ (!(isset($prod->producto->foto[0]->url))) ? 'sinimagen.png' : $prod->producto->foto[0]->url}}}" class="NOimageTOzoom" alt="imagen" data-overlay=""  >
                    </a>
                 </div>   
                 <div class="card-body">
                     <h5 class="card-title">
-                      {{{ (!(isset($prod->descripcion[0]->nombre))) ? '-' : $prod->descripcion[0]->nombre}}}
-                      {{--     $prod->descripcion->nombre --}}
+                       {{{ (!(isset($prod->producto->descripcion[0]->nombre))) ? '-' : $prod->producto->descripcion[0]->nombre}}} 
+                      
                     </h5>
                 </div>
                 <div class="card-footer">
-                  <div class="infoExtra">Fabricante: {{$prod->fabricante->nombre}}</div>
-                  <div class="infoExtra">Código: 087868756464576745</div>
+                  {{-- <div class="infoExtra">Fabricante: {{$prod->fabricante->nombre}}</div> --}}
+                   
+                   <div class="infoExtra">Fabricante: {{$prod->producto->fabricante->nombre}}</div> 
+
+                  <div class="infoExtra">Código: {{$prod->producto->surtido}}</div>
+                  <div class="infoExtra">Almacén: {{$prod->almacen->nombre}}</div>
                 </div>
 
                   <button class="agregar_cesta fas fa-shopping-cart" id_producto="{{$prod->id}}" >

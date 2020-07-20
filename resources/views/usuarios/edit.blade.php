@@ -29,6 +29,39 @@
             <input type="email" class="form-control" name="email" id="email" placeholder="pedro@example.com" value="{{ old('email', $user->email) }}">
         </div>
 
+          {{-- almacen--}}
+             <div class="form-group">
+                    <label for="almacen_id">{{ trans('aplicacion.warehouse') }}:</label>
+                        <select name="almacen_id" id="almacen_id"  tipo="entrada"  class="form-control">
+                                @foreach ($almacenes as $key => $valor)
+                                    <option value="{{ $valor->id }}"
+                                    
+                                        @if ($user->almacen_id == old('almacen_id', $valor->id))
+                                            selected="selected"
+                                        @endif
+                                    >{{ $valor->nombre  }}</option>
+                                @endforeach
+                        </select>
+            </div> 
+
+
+
+            {{-- Perfiles o roles--}}
+             <div class="form-group">
+                    <label for="role_id">{{ trans('aplicacion.roles') }}:</label>
+                        <select name="role_id" id="role_id"  tipo="entrada"  class="form-control">
+                                @foreach ($perfiles as $key => $valor)
+                                    <option value="{{ $valor->id }}"
+                                    
+                                        @if ($user->role_id == old('role_id', $valor->id))
+                                            selected="selected"
+                                        @endif
+                                    >{{ $valor->nombre_rol  }}</option>
+                                @endforeach
+                        </select>
+            </div> 
+
+
 
         <div class="form-group">
             <label for="password">{{ trans('autenticacion.Password') }}:</label>

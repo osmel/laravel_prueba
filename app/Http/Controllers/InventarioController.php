@@ -21,7 +21,7 @@ Use App\Almacen;
 Use App\Movimiento;
 Use App\Inventario;
 
-Use App\Almacen_Inventario;
+Use App\Almacen_Producto;
 
 use Illuminate\Http\Request;
 
@@ -170,7 +170,7 @@ class InventarioController extends Controller
             */
 
 
-            $anterior = Almacen_Inventario::where('producto_id',$valor->producto_id)
+            $anterior = Almacen_Producto::where('producto_id',$valor->producto_id)
                                             ->where('almacen_id', $valor->almacen_id)
                                             ->where( 'precio' ,$valor->precio)
                                             ->first();
@@ -178,7 +178,7 @@ class InventarioController extends Controller
              //dd($valor->cantidad+$anterior->cantidad);
              $new_cantidad = (isset($anterior->cantidad)) ? $valor->cantidad+$anterior->cantidad : $valor->cantidad;
 
-           $pivot = Almacen_Inventario::updateOrCreate(
+           $pivot = Almacen_Producto::updateOrCreate(
                 ['producto_id' => $valor->producto_id,'almacen_id' => $valor->almacen_id,'precio' => $valor->precio  ],
                 ['cantidad' => $new_cantidad ]
             );
@@ -191,7 +191,7 @@ class InventarioController extends Controller
 
      // `inventario_id`, `almacen_id`, `precio`, `cantidad`
 
-      return redirect()->route('inventario.index'); //redirigiendo a 
+      return redirect()->route('inicio'); //redirigiendo a 
 
       //return $movimientos;
 

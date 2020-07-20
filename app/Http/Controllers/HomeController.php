@@ -20,7 +20,9 @@ Use App\Codigo;
 Use App\Movimiento;
 Use App\Inventario;
 
-Use App\Almacen_Inventario;
+Use App\Almacen_Producto;
+Use App\Promocion;
+Use App\Condicion;
 
 /*
 Use App\Marca;
@@ -52,14 +54,93 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        /*
-           $inventario = Almacen_Inventario::with([
-           'producto' => function($query)  {
-               $query->select('*');
-               //->withPivot('almacen_id','inventario_id');
-           },   
-           ])->get();    
-           */
+              
+
+       $fecha='"2020-07-18"';
+
+      $sql="select max(promocion_id) promocion_id, max(descuento) descuento, max(id_almacen) id_almacen, max(id_fabricante) id_fabricante,max(id_variacion) id_variacion  from                            
+          (
+
+                select promocion_id,descuento,
+
+                CASE
+                    WHEN campo = 'almacen' THEN id
+                END id_almacen,
+
+                CASE
+                    WHEN campo = 'fabricante' THEN id
+                END id_fabricante,
+
+
+                CASE
+                    WHEN campo = 'variacion' THEN id
+                END id_variacion          
+
+
+                FROM
+                  (
+                      SELECT c.promocion_id,c.campo,GROUP_CONCAT(c.campo_id) id, p.descuento FROM condicions c
+                      inner join ( select * from promocions where  ( promocions.fecha_inicio <=".$fecha." and  promocions.fecha_fin >= ".$fecha."   )     ) p ON p.id=c.promocion_id
+                      GROUP BY promocion_id, campo
+                  )    aaa
+          )   bb 
+          group by promocion_id ";
+    
+          $info = \DB::select(\DB::raw($sql));
+              //dd( $info );
+
+           $promocion=[];
+              foreach ($info as $key => $value) {
+                        $productos = Almacen_Producto::whereHas('almacen', 
+                            function (Builder $query)  use ($value) {
+                              $query->Where(function ($query)  use ($value) {
+                                  if ($value->id_almacen) {
+                                      $v = explode(",",   $value->id_almacen);
+                                      $query->whereIn("almacens.id", $v );
+                                  }  else {
+                                    $query->whereNotIn("almacens.id", [] );
+                                  }
+                              });
+                              }, '>=', 1)
+                           ->whereHas('producto', 
+                            function (Builder $query) use ($value) {
+                                  $query->whereHas('fabricante', 
+                                            function (Builder $query) use ($value) {
+                                              $query->Where(function ($query)  use ($value) {
+                                                       if ($value->id_fabricante) {
+                                                            $v = explode(",",   $value->id_fabricante);
+                                                            $query->whereIn("fabricantes.id", $v );
+                                                        }  else {
+                                                          $query->whereNotIn("fabricantes.id", [] );
+                                                        }
+
+                                              });
+                                      }, '>=', 1);
+                                   $query->whereHas('variacions',   //marca, modelo, variacion
+                                            function (Builder $query)  use ($value) {
+                                              
+                                              $query->Where(function ($query)   use ($value) {
+                                                       
+                                                       if ($value->id_variacion) {
+                                                           $v = explode(",",   $value->id_variacion);
+                                                            $query->whereIn("variacions.id", $v );
+                                                        }  else {
+                                                          $query->whereNotIn("variacions.id", [] );
+                                                        }                                                      
+                                              });
+
+                                      }, '>=', 1);
+                              }, '>=', 1)->get();
+                       
+                        $productos->map(function($item) use ($value) {
+                            $item['descuento'] = $value->descuento;
+                            return $item;
+                        });
+
+                          $promocion[] = $productos;
+
+              } //fin del foreach   
+
 
 
         if ($request->session()->has('arreglo')) { 
@@ -77,19 +158,29 @@ class HomeController extends Controller
                   return $producto['precio']* (session('arreglo.'.$producto['id']) ) ;
             });            
 
-        //dd($carrito);
+ 
 
-        $producto= Producto::paginate(9); //paginate(2); //simplePaginate//all(); //->take(10);     
-
-          /*
-           $producto = Almacen_Inventario::with([
+           $producto = Almacen_Producto::with([
            'producto' => function($query)  {
                $query->select('*');
-               //->withPivot('almacen_id','inventario_id');
            },   
-           ])->paginate(9);
-           */
-           //dd($producto);
+           ])
+           ->paginate(9);
+
+            $producto->map(function($item) use ($promocion) { 
+                  $acumulado =0;
+                  foreach ($promocion as $key => $value) {
+                       if ( $value->where('id',$item['id'] )->first() ) { //
+                           $acumulado = $acumulado+$value->where('id',$item['id'] )->first()->descuento;
+
+                       }
+
+                  }
+                      $item['descuento'] =$acumulado; //$value->descuento;
+                      return $item;
+                  });
+
+
 
         if ($request->ajax()){            //pregunta si el request es mediante ajax
                //vamos a enviar una respuesta de tipo json... vamos a responder con el partial q hemos creado
@@ -98,6 +189,7 @@ class HomeController extends Controller
               return response()->json(  view('presentacion.galeria',['title'=>'Listado de usuarios',
                 'carrito'=>$carrito,
                 'importe'=>$importe,
+              //  'promocion'=>$promocion,
                 'producto'=>$producto])->render()  ) ;
 
         }    

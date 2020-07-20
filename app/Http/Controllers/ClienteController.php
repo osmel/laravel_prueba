@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;  //para usar DB, para consultas nativas y con
 use App\Http\Servicios\NotificacionesInterface as NotificacionesInterface;
 
 use Illuminate\Http\Request;
-
+use App\Almacen_Producto; 
 
 use Illuminate\Support\Facades\Auth;
 
@@ -46,7 +46,16 @@ class ClienteController extends Controller
 
         //dd($carrito);
 
-        $producto= Producto::paginate(10); //paginate(2); //simplePaginate//all(); //->take(10);   
+        //$producto= Producto::paginate(10); //paginate(2); //simplePaginate//all(); //->take(10);   
+
+          $producto = Almacen_Producto::with([
+           'producto' => function($query)  {
+               $query->select('*');
+               //->withPivot('almacen_id','inventario_id');
+           },   
+           ])->paginate(9);  
+
+            
 
         if ($request->ajax()){            //pregunta si el request es mediante ajax
                //vamos a enviar una respuesta de tipo json... vamos a responder con el partial q hemos creado

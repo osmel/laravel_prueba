@@ -133,35 +133,26 @@
         </div> 
 
 
-      {{-- almacen--}}
-         <div class="form-group">
 
+
+      {{-- almacen--}}
+      
+        <div class="form-group" style="display:{{ ( (Auth::user()->role_id==1) ? '' : 'none') }}" >
             
             <div class="col-sm-12">
                 <label for="precio">{{ trans('aplicacion.warehouse') }}:</label>
-                {{-- <input type="text" class="form-control" name="precio" id="precio" placeholder="#.##" value="{{ old('precio') }}"> --}}
-
-                    
-                
                     <select name="almacen_id" id="almacen_id"  tipo="entrada"  class="form-control">
                             @foreach ($almacenes as $key => $valor)
                                 <option value="{{ $valor->id }}"
-                                
-                                    @if ($key == old('almacen_id', $valor->id))
+                                    @if (   ( (empty(Auth::user()->almacen_id)) ? 1 : Auth::user()->almacen_id) == old('almacen_id', $valor->id))
                                         selected="selected"
                                     @endif
                                 >{{ $valor->nombre  }}</option>
                             @endforeach
-
-
-                            
-                        
                     </select>
-
-
-            </div>    
+            </div>
+            
         </div> 
-
 
 
     </div>

@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role_id',
+        'name', 'email', 'password','role_id','almacen_id',
     ];
 
     /**
@@ -54,7 +54,12 @@ class User extends Authenticatable
     public function esAdministrador()  {
         
         //this=tabla usuario   dd($this->id);   dd($this->email);
-        if ($this->role->nombre_rol=='admin') {
+
+        if (!(isset($this->role->nombre_rol))) { //este es el caso de los usuarios exteriores q se dieron altas por fuera con rol_id=null
+            return false;    
+        }
+
+        if (($this->role->nombre_rol=='admin')  || ($this->role->nombre_rol=='Almacenista') )   {
             return true;
         } 
         return false;

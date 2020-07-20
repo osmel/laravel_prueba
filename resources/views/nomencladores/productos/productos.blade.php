@@ -19,11 +19,11 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">{{ trans('aplicacion.Codigo') }}</th>
-            <th scope="col">{{ trans('aplicacion.Descripciones') }}</th>
-            <th scope="col">{{ trans('aplicacion.Marca') }}</th>
-            <th scope="col">{{ trans('aplicacion.Modelo') }}</th>
-            <th scope="col">{{ trans('aplicacion.Variacion') }}</th>
+            <th scope="col">{{ trans('aplicacion.codigo') }}</th>
+            <th scope="col">{{ trans('aplicacion.descripciones') }}</th>
+            <th scope="col">{{ trans('aplicacion.marca') }}</th>
+            <th scope="col">{{ trans('aplicacion.model') }}</th>
+            <th scope="col">{{ trans('aplicacion.variations') }}</th>
 
             {{--
             <th scope="col">{{ trans('aplicacion.Edit') }}</th>

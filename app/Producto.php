@@ -16,6 +16,7 @@ use App\Marca; //tabla no relacionada directamente, si indirectamente
 use App\Inventario;
 
 use App\Movimiento;
+use App\Promocion;
 
 
 use Illuminate\Http\Request;
@@ -36,6 +37,13 @@ class Producto extends Model
 
 
 
+
+
+
+    public function promocions()   { 
+        return $this->belongsToMany(Promocion::class);    //m-m
+
+    }
 
 
 ///////////////////relacion 1 a 1

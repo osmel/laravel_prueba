@@ -83,7 +83,8 @@ idioma= (jQuery('.idioma').attr('idioma')!='') ? jQuery('.idioma').attr('idioma'
 ////////////////////////nomenclador de productos/////////////////////////////////////
 
 
-$('#multiselect_marca, #multiselect_descripcion, #multiselect_codigo, #multiselect_imagen, #multiselect_categoria, #multiselect_fabricante').multiselect({
+ if ( $('input[multiple="multiple"]').length > 0 ) {
+  $('#multiselect_marca, #multiselect_descripcion, #multiselect_codigo, #multiselect_imagen, #multiselect_categoria, #multiselect_fabricante').multiselect({
 
    //seleccionar todos
             includeSelectAllOption: true,   //para habilitar seleccionar todo
@@ -263,7 +264,7 @@ $('#multiselect_marca, #multiselect_descripcion, #multiselect_codigo, #multisele
 
 
 
-
+}
 
 
 ////////////////////////////////////////////////////////////////////////////
